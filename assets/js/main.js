@@ -12,6 +12,20 @@
   revealEls.forEach(function(el){ io.observe(el); });
 })();
 
+/* ---------- Center specific hash targets in the viewport ---------- */
+(function(){
+  function centerHashTarget(){
+    var hash = window.location.hash;
+    if(!hash) return;
+    var el = document.getElementById(hash.slice(1));
+    if(!el || !el.hasAttribute('data-scroll-center')) return;
+    var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.scrollIntoView({ block:'center', behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+  window.addEventListener('load', centerHashTarget);
+  window.addEventListener('hashchange', centerHashTarget);
+})();
+
 /* ---------- Easter egg: console note for the curious ---------- */
 (function(){
   var style1 = 'font-family:monospace;font-size:13px;color:#100016;';
