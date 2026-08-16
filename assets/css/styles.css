@@ -475,7 +475,7 @@ section.tight + section.tight .section-title{ margin-top:0.4rem; }
 @media (max-width: 700px){ .program-row{ grid-template-columns:1fr; gap:0.4rem; } }
 .program-row h3{ font-size:1.15rem; }
 .program-meta{ font-family:'IBM Plex Mono',monospace; font-size:0.74rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:0.04em; }
-.program-row p{ margin:0.5rem 0 0; color:var(--ink-soft); max-width:60ch; }
+.program-row p{ margin:0.5rem 0 0; color:var(--ink-soft); }
 
 /* ---------- Programs: interactive journey map ---------- */
 #programs{ --journey-accent:var(--mint); --journey-accent-strong:var(--accent-green); }
