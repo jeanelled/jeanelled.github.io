@@ -209,6 +209,31 @@ a:focus-visible, button:focus-visible{
 }
 .page-header-title-row{ display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-top:0.6rem; }
 .page-header-title-row h1{ margin-top:0; }
+.resume-fab{
+  position:fixed; right:clamp(1rem, 3vw, 1.75rem); bottom:clamp(1rem, 3vw, 1.75rem); z-index:150;
+  box-shadow:var(--shadow);
+  animation:resume-fab-flash 2.4s ease-out 0.6s backwards;
+}
+@keyframes resume-fab-flash{
+  0%   { transform:scale(0.6); opacity:0; }
+  12%  { transform:scale(1.12); opacity:1; background:var(--accent-green); color:var(--bg); box-shadow:var(--shadow), 0 0 0 0 var(--accent-green); }
+  30%  { transform:scale(1); box-shadow:var(--shadow), 0 0 0 14px transparent; }
+  42%  { transform:scale(1.08); background:var(--accent-green); color:var(--bg); box-shadow:var(--shadow), 0 0 0 0 var(--accent-green); }
+  62%  { transform:scale(1); box-shadow:var(--shadow), 0 0 0 14px transparent; }
+  100% { transform:scale(1); box-shadow:var(--shadow), 0 0 0 0 transparent; }
+}
+.resume-flash-soft{ animation:resume-flash-soft 2.4s ease-out 0.6s backwards; }
+@keyframes resume-flash-soft{
+  0%   { transform:scale(0.85); opacity:0; }
+  12%  { transform:scale(1.05); opacity:1; background:var(--accent-green); color:var(--bg); border-color:var(--accent-green); box-shadow:0 0 0 0 var(--accent-green); }
+  30%  { transform:scale(1); box-shadow:0 0 0 8px transparent; }
+  42%  { transform:scale(1.03); background:var(--accent-green); color:var(--bg); border-color:var(--accent-green); box-shadow:0 0 0 0 var(--accent-green); }
+  62%  { transform:scale(1); box-shadow:0 0 0 8px transparent; }
+  100% { transform:scale(1); box-shadow:0 0 0 0 transparent; }
+}
+@media (prefers-reduced-motion: reduce){
+  .resume-fab, .resume-flash-soft{ animation:none; }
+}
 .page-header p{
   color:var(--ink-soft);
   font-size:1.02rem;
@@ -417,7 +442,61 @@ section.tight + section.tight .section-title{ margin-top:0.4rem; }
   background:var(--bg); overflow:hidden;
 }
 .embed-box.embed-box-shrink{ flex:0 0 75%; }
-.embed-box iframe{ display:block; width:100%; height:100%; border:0; }
+
+/* ---------- Portfolio feature + viewer ---------- */
+.portfolio-feature{
+  display:grid; grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); gap:clamp(1.5rem,4vw,3rem);
+  align-items:center; margin:clamp(2.5rem,6vw,4rem) 0 clamp(2.5rem,6vw,4rem);
+}
+.portfolio-cover{
+  position:relative; display:block; width:100%; padding:0; cursor:pointer;
+  border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+  background:var(--bg); box-shadow:var(--shadow);
+  transform:rotate(-1.2deg); transition:transform 0.25s ease, box-shadow 0.25s ease;
+}
+.portfolio-cover img{ display:block; width:100%; height:auto; }
+.portfolio-cover:hover, .portfolio-cover:focus-visible{ transform:rotate(0deg) translateY(-4px); }
+.portfolio-cover-hint{
+  position:absolute; right:0.9rem; bottom:0.9rem; font-size:0.75rem; padding:0.35rem 0.7rem;
+  border-radius:999px; background:var(--onyx); color:var(--blush);
+  opacity:0; transform:translateY(6px); transition:opacity 0.2s ease, transform 0.2s ease;
+}
+.portfolio-cover:hover .portfolio-cover-hint, .portfolio-cover:focus-visible .portfolio-cover-hint{ opacity:1; transform:none; }
+.portfolio-feature-text h2{ font-size:clamp(1.6rem,3vw,2.2rem); margin:0.5rem 0 0.7rem; }
+.portfolio-feature-text p{ color:var(--ink-soft); margin:0 0 1.3rem; max-width:40ch; }
+.portfolio-feature-text button.btn{ cursor:pointer; }
+.portfolio-feature-text .portfolio-appendix{ margin:0.9rem 0 0; font-size:0.72rem; opacity:0.6; }
+.portfolio-viewer{
+  width:min(94vw,1400px); height:92vh; max-width:none; max-height:none; padding:0;
+  border:1px solid var(--line); border-radius:var(--radius); background:var(--bg); color:var(--ink);
+  overflow:hidden; flex-direction:column;
+}
+.portfolio-viewer[open]{ display:flex; }
+.portfolio-viewer::backdrop{ background:rgba(0,0,0,0.6); }
+.portfolio-viewer-bar{
+  display:flex; align-items:center; gap:1rem; padding:0.6rem 0.8rem 0.6rem 1.1rem;
+  border-bottom:1px solid var(--line); font-size:0.78rem;
+}
+.portfolio-viewer-bar span{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink-soft); }
+.portfolio-viewer-bar a{ color:var(--ink); }
+.portfolio-viewer-close{
+  border:0; background:transparent; color:var(--ink); font-size:1.6rem; line-height:1; cursor:pointer; padding:0 0.3rem;
+}
+.portfolio-viewer iframe{ flex:1; width:100%; border:0; }
+.portfolio-feature:first-child{ margin-top:0; }
+.portfolio-feature + dialog + .portfolio-feature{ margin-top:0; }
+.portfolio-feature.is-mirrored{ grid-template-columns:minmax(0,1fr) minmax(0,1.5fr); }
+.portfolio-feature.is-mirrored .portfolio-cover{ order:2; transform:rotate(1.2deg); }
+.portfolio-feature.is-mirrored .portfolio-cover:hover,
+.portfolio-feature.is-mirrored .portfolio-cover:focus-visible{ transform:rotate(0deg) translateY(-4px); }
+.portfolio-feature.is-mirrored .portfolio-cover-hint{ right:auto; left:0.9rem; }
+.portfolio-feature.is-mirrored .portfolio-feature-text{ text-align:right; }
+.portfolio-feature.is-mirrored .portfolio-feature-text p{ margin-left:auto; }
+.portfolio-feature.is-mirrored .cta-row{ justify-content:flex-end; }
+@media (max-width:800px){
+  .portfolio-feature, .portfolio-feature.is-mirrored{ grid-template-columns:1fr; }
+  .portfolio-feature.is-mirrored .portfolio-cover{ order:0; }
+}
 @media (max-width:700px){
   .embed-row{ flex-direction:column; }
   .embed-box.embed-box-shrink{ flex-basis:100%; }
@@ -974,3 +1053,12 @@ body, header.site-nav, footer, .project-box, .toolkit-strip a, .badge, .link-rea
 .robot-figure .robot-name{ font-family:'IBM Plex Mono',monospace; font-size:0.8rem; font-weight:600; color:var(--ink); }
 .robot-figure .robot-desc{ font-family:'IBM Plex Mono',monospace; font-size:0.68rem; color:var(--ink-faint); }
 .robot-figure .robot-star{ color:#c9971f; font-size:1.7em; margin-right:0.3rem; }
+
+/* ---------- Home: spotlight the profile tile until first scroll ---------- */
+.bento > :not(.tile-profile){ transition:opacity 0.6s ease, transform 0.6s ease; }
+.bento-spotlight .bento > :not(.tile-profile){ opacity:0.4; }
+.bento > .tile-profile{ transition:opacity 0.6s ease, transform 0.6s ease, box-shadow 0.6s ease, margin 0.6s ease; }
+.bento-spotlight .bento > .tile-profile.reveal.in{
+  z-index:1; margin-inline:-1.5rem; transform:translateY(-10px) scale(1.06);
+  box-shadow:0 0 0 3px var(--bg), 0 0 0 5px #3a7a4c, 0 6px 12px rgba(0,0,0,0.12), 0 34px 70px -20px rgba(16,0,22,0.5);
+}

@@ -54,29 +54,28 @@
 
 <section class="tight" id="digital-art">
   <div class="wrap">
-    <h2 class="section-title">Digital Art</h2>
-    <p class="section-subtitle">Calligraphy, Adobe Illustrator, logos, and more!</p>
-
-    <div class="art-group reveal">
-      <span class="mono groupname">Gallery</span>
-      <div class="art-photo-grid">
-        <img src="assets/images/art/album-cover-v1.png" alt="Album cover v1" loading="lazy">
-        <img src="assets/images/art/confetti.png" alt="Confetti" loading="lazy">
-        <img src="assets/images/art/album-cover-v2.png" alt="Album cover v2" loading="lazy">
-        <img src="assets/images/art/dragonfruit.png" alt="Dragonfruit" loading="lazy">
-        <img src="assets/images/art/ethereal.png" alt="Ethereal" loading="lazy">
-        <img src="assets/images/art/girls-just-wanna-have-fun.png" alt="Girls just wanna have fun" loading="lazy">
-        <img src="assets/images/art/koifish.png" alt="Koi fish" loading="lazy">
-        <img src="assets/images/art/logo-v1.png" alt="Logo v1" loading="lazy">
-        <img src="assets/images/art/logo-v2.png" alt="Logo v2" loading="lazy">
-        <img src="assets/images/art/one-day-or-day-one.png" alt="One day or day one" loading="lazy">
-        <img src="assets/images/art/peisoks.png" alt="Peiskos" loading="lazy">
-        <img src="assets/images/art/robot.png" alt="Robot" loading="lazy">
-        <img src="assets/images/art/summer-loving.png" alt="Summer loving" loading="lazy">
-        <img src="assets/images/art/yolo.png" alt="Yolo" loading="lazy">
+    <div class="portfolio-feature reveal">
+      <button class="portfolio-cover" type="button" data-viewer-open="creativeViewer" aria-label="Open creative portfolio">
+        <img src="assets/images/art/creative-portfolio-cover.jpg" alt="Creative Portfolio cover" loading="lazy">
+        <span class="portfolio-cover-hint mono">Click to read &rarr;</span>
+      </button>
+      <div class="portfolio-feature-text">
+        <span class="eyebrow">Selected works &middot; 2026</span>
+        <h2>Creative portfolio</h2>
+        <p>Calligraphy, movie posters, ceramics, videos and paper stars, each with a short reflection, in one 13-page read.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" type="button" data-viewer-open="creativeViewer">Read portfolio</button>
+        </div>
       </div>
     </div>
-
+    <dialog class="portfolio-viewer" id="creativeViewer" aria-label="Creative portfolio">
+      <div class="portfolio-viewer-bar">
+        <span class="mono">JeanelleDao_Creative_Portfolio.pdf</span>
+        <a class="mono" href="assets/JeanelleDao_Creative_Portfolio.pdf" target="_blank" rel="noopener noreferrer">Open in new tab &nearr;</a>
+        <button type="button" class="portfolio-viewer-close" aria-label="Close" data-viewer-close>&times;</button>
+      </div>
+      <iframe data-src="assets/JeanelleDao_Creative_Portfolio.pdf#view=FitH" title="Creative Portfolio"></iframe>
+    </dialog>
   </div>
 </section>
 

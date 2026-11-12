@@ -80,3 +80,72 @@
     if(pos === SEQUENCE.length){ pos = 0; unlock(); }
   });
 })();
+
+/* ---------- Portfolio / slides viewers ---------- */
+(function(){
+  document.querySelectorAll('[data-viewer-open]').forEach(function(btn){
+    var viewer = document.getElementById(btn.getAttribute('data-viewer-open'));
+    if(!viewer || typeof viewer.showModal !== 'function') return;
+    btn.addEventListener('click', function(){
+      var frame = viewer.querySelector('iframe');
+      if(!frame.src) frame.src = frame.getAttribute('data-src');
+      viewer.showModal();
+    });
+  });
+  document.querySelectorAll('dialog.portfolio-viewer').forEach(function(viewer){
+    viewer.querySelector('[data-viewer-close]').addEventListener('click', function(){ viewer.close(); });
+    viewer.addEventListener('click', function(e){ if(e.target === viewer) viewer.close(); });
+  });
+})();
+
+/* ---------- Home spotlight: first scroll restores tile color, then scrolling resumes ---------- */
+(function(){
+  var root = document.documentElement;
+  if(!root.classList.contains('bento-spotlight')) return;
+  var SCROLL_KEYS = { ArrowDown:1, ArrowUp:1, PageDown:1, PageUp:1, End:1, Home:1, ' ':1 };
+  function cleanup(){
+    window.removeEventListener('wheel', onIntent, { passive:false });
+    window.removeEventListener('touchmove', onIntent, { passive:false });
+    window.removeEventListener('keydown', onKey);
+    window.removeEventListener('scroll', onScroll);
+  }
+  function release(){
+    root.classList.remove('bento-spotlight');
+    cleanup();
+    // Keep holding the page through the 0.6s fade, then for a little extra scroll distance
+    holdStart = Date.now();
+    window.addEventListener('wheel', hold, { passive:false });
+    window.addEventListener('touchstart', onTouchStart, { passive:true });
+    window.addEventListener('touchmove', hold, { passive:false });
+  }
+  var HOLD_MS = 600, HOLD_EXTRA_PX = 160;
+  var holdStart = 0, extra = 0, touchY = null;
+  function onTouchStart(e){ touchY = e.touches[0].clientY; }
+  function hold(e){
+    var d = 0;
+    if(e.type === 'wheel'){ d = Math.abs(e.deltaY); }
+    else if(e.touches){
+      var y = e.touches[0].clientY;
+      if(touchY !== null) d = Math.abs(y - touchY);
+      touchY = y;
+    }
+    if(Date.now() - holdStart >= HOLD_MS) extra += d;
+    if(extra < HOLD_EXTRA_PX){ e.preventDefault(); return; }
+    window.removeEventListener('wheel', hold, { passive:false });
+    window.removeEventListener('touchstart', onTouchStart, { passive:true });
+    window.removeEventListener('touchmove', hold, { passive:false });
+  }
+  function onIntent(e){ e.preventDefault(); release(); }
+  function onKey(e){
+    if(!SCROLL_KEYS[e.key] || /input|textarea|select/i.test(e.target.tagName)) return;
+    e.preventDefault(); release();
+  }
+  function onScroll(){ release(); }
+  window.addEventListener('wheel', onIntent, { passive:false });
+  window.addEventListener('touchmove', onIntent, { passive:false });
+  window.addEventListener('keydown', onKey);
+  window.addEventListener('load', function(){
+    if(window.scrollY > 0){ release(); return; }
+    window.addEventListener('scroll', onScroll);
+  });
+})();
